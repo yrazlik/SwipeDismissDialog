@@ -8,7 +8,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ public class SwipeDialogFragment extends SwipeDismissDialogFragment{
 
     RelativeLayout bar;
     Button dialogBtn;
+    ListView lv;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -38,6 +42,24 @@ public class SwipeDialogFragment extends SwipeDismissDialogFragment{
                 Toast.makeText(getActivity(), "CLICKED", Toast.LENGTH_SHORT).show();
             }
         });
+
+        lv = (ListView) d.findViewById(R.id.lv);
+        String[] values = new String[] { "Android List View",
+                "Adapter implementation",
+                "Simple List View In Android",
+                "Create List View Android",
+                "Android Example",
+                "List View Source Code",
+                "List View Array Adapter",
+                "Android Example List View",
+                "Android Example List View","Android Example List View","Android Example List View","Android Example List View",
+                "Android Example List View","Android Example List View","Android Example List View","Android Example List View","Android Example List View"
+                ,"Android Example List View","Android Example List View"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        lv.setAdapter(adapter);
 
         setDialogPreferences(d, R.style.dialogAnimation);
 

@@ -65,6 +65,7 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
     private VelocityTracker mVelocityTracker;
     private float mTranslationX;
 
+
     private boolean mTiltEnabled = true;
 
     /**
@@ -136,43 +137,22 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
                     break;
                 }
 
-                float deltaX = motionEvent.getRawX() - mDownX;
-                mVelocityTracker.addMovement(motionEvent);
-                mVelocityTracker.computeCurrentVelocity(1000);
-                float velocityX = mVelocityTracker.getXVelocity();
-                float absVelocityX = Math.abs(velocityX);
-                float absVelocityY = Math.abs(mVelocityTracker.getYVelocity());
-                boolean dismiss = false;
-                final boolean dismissRight;
-                if (Math.abs(deltaX) > mViewWidth / 2 && mSwiping) {
-                    dismiss = true;
-                    dismissRight = deltaX > 0;
-                } else if (mMinFlingVelocity <= absVelocityX && absVelocityX <= mMaxFlingVelocity
-                        && absVelocityY < absVelocityX
-                        && absVelocityY < absVelocityX && mSwiping) {
-                    // dismiss only if flinging in the same direction as dragging
-                    dismiss = (velocityX < 0) == (deltaX < 0);
-                    dismissRight = mVelocityTracker.getXVelocity() > 0;
-                } else {
-                    dismissRight = false;
-                }
+                boolean dismiss = (mView.getY() >= mView.getHeight() / 5) ? true : false;
                 if (dismiss) {
                     // dismiss
                     mView.animate()
-                            .translationX(dismissRight ? mViewWidth : -mViewWidth)
-                            .rotation(mTiltEnabled ? (dismissRight ? 45 : -45) : 0f)
-                            .alpha(0)
+                            .translationY(mView.getHeight())
                             .setDuration(mAnimationTime)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    performDismiss(dismissRight);
+                                    performDismiss(false);
                                 }
                             });
-                } else if (mSwiping) {
+                } else {
                     // cancel
                     mView.animate()
-                            .translationX(0)
+                            .translationY(0)
                             .rotation(0)
                             .alpha(1)
                             .setDuration(mAnimationTime)
@@ -213,30 +193,9 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
                 }
 
                 mVelocityTracker.addMovement(motionEvent);
-                float deltaX = motionEvent.getRawX() - mDownX;
+
                 float deltaY = motionEvent.getRawY() - mDownY;
-                if (Math.abs(deltaX) > mSlop && Math.abs(deltaY) < Math.abs(deltaX) / 2) {
-                    mSwiping = true;
-                    mSwipingSlop = (deltaX > 0 ? mSlop : -mSlop);
-                    mView.getParent().requestDisallowInterceptTouchEvent(true);
-
-                    // Cancel listview's touch
-                    MotionEvent cancelEvent = MotionEvent.obtain(motionEvent);
-                    cancelEvent.setAction(MotionEvent.ACTION_CANCEL |
-                            (motionEvent.getActionIndex() <<
-                                    MotionEvent.ACTION_POINTER_INDEX_SHIFT));
-                    mView.onTouchEvent(cancelEvent);
-                    cancelEvent.recycle();
-                }
-
-                if (mSwiping) {
-                    mTranslationX = deltaX;
-                    mView.setTranslationX(deltaX - mSwipingSlop);
-                    mView.setRotation(mTiltEnabled ? 45f * deltaX / mViewWidth : 0f);
-                    // TODO: use an ease-out interpolator or such
-                    mView.setAlpha(Math.max(0f, Math.min(1f, 1f - 2f * Math.abs(deltaX) / mViewWidth)));
-                    return true;
-                }
+                mView.setTranslationY(deltaY - mSwipingSlop);
                 break;
             }
         }
