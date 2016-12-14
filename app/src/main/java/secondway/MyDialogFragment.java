@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -66,9 +67,44 @@ public class MyDialogFragment extends DialogFragment{
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
         lv.setAdapter(adapter);
         lv.setOnTouchListener(new View.OnTouchListener() {
+            String direction = "up";
+            float y1 = 0, y2 = 0, y3 = 0, dy;
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0) {
+
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        y1 = motionEvent.getY();
+                        break;
+                    }
+                /*    case MotionEvent.ACTION_UP: {
+                        y2 = motionEvent.getY();
+                        dy = y2 - y1;
+
+                        // Use dx and dy to determine the direction
+
+                        if (dy > 0)
+                            direction = "down";
+                        else
+                            direction = "up";
+
+                    }*/
+                    case MotionEvent.ACTION_MOVE: {
+                        y3 = motionEvent.getY();
+                        dy = y3 - y1;
+                        if(dy > 0) {
+                            direction = "down";
+                            Log.d("DIRECTION", direction);
+                        } else {
+                            direction = "up";
+                            Log.d("DIRECTION", direction);
+                        }
+                        break;
+                    }
+                }
+
+                if((lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0) && direction.equalsIgnoreCase("down")) {
                     swipeDismissTouchEventListener.onTouch(getDialog().getWindow().getDecorView(), motionEvent);
                 } else {
 
