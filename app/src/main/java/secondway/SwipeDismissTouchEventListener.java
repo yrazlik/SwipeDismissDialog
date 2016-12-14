@@ -22,6 +22,7 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
     private View mView;
     private DismissCallbacks mCallbacks;
     private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
+    private float initialYPos;
 
     private float mDownY;
     private Object mToken;
@@ -56,6 +57,7 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
         switch (motionEvent.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
                 mDownY = motionEvent.getRawY();
+                initialYPos = motionEvent.getRawY();
                 if (mCallbacks.canDismiss(mToken)) {
                     mVelocityTracker = VelocityTracker.obtain();
                     mVelocityTracker.addMovement(motionEvent);
@@ -64,6 +66,7 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
             }
 
             case MotionEvent.ACTION_UP: {
+                initialYPos = 0;
                 if (mVelocityTracker == null) {
                     break;
                 }
@@ -97,6 +100,7 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
             }
 
             case MotionEvent.ACTION_CANCEL: {
+                initialYPos = 0;
                 if (mVelocityTracker == null) {
                     break;
                 }
@@ -122,7 +126,9 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
                 mVelocityTracker.addMovement(motionEvent);
 
                 float deltaY = motionEvent.getRawY() - mDownY;
-                mView.setTranslationY(deltaY);
+                if(motionEvent.getRawY() > initialYPos) {
+                    mView.setTranslationY(deltaY);
+                }
                 break;
             }
         }

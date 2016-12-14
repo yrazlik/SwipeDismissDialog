@@ -25,9 +25,9 @@ public class SwipeableFrameLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(swipeDismissEnabled) {
+     /*   if(swipeDismissEnabled) {
             return true;
-        }
+        }*/
         return false;
         /*if (mTouchListener != null) {
             if (mTouchListener.onTouch(this, ev)) {
