@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -64,6 +65,17 @@ public class MyDialogFragment extends DialogFragment{
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
         lv.setAdapter(adapter);
+        lv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0) {
+                    swipeDismissTouchEventListener.onTouch(getDialog().getWindow().getDecorView(), motionEvent);
+                } else {
+
+                }
+                return false;
+            }
+        });
 
 
 
