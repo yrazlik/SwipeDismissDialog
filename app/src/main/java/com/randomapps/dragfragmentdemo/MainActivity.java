@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
                 BottomDialogFragment bdf = new BottomDialogFragment();
                 SwipeDialogFragment sdf = new SwipeDialogFragment();
                 MyDialogFragment mdf = new MyDialogFragment();
-                getSupportFragmentManager().beginTransaction().add(mdf, "").commit();
+                getSupportFragmentManager().beginTransaction().add(sdf, "").commit();
             }
         });
     }

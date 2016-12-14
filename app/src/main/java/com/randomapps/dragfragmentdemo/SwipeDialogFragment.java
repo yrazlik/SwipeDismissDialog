@@ -63,7 +63,7 @@ public class SwipeDialogFragment extends SwipeDismissDialogFragment{
 
         setDialogPreferences(d, R.style.dialogAnimation);
 
-        lv.setOnTouchListener(new View.OnTouchListener() {
+     /*   lv.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
@@ -78,7 +78,7 @@ public class SwipeDialogFragment extends SwipeDismissDialogFragment{
                         return false;
                 }
             }
-        });
+        });*/
 
         return d;
 
@@ -101,4 +101,9 @@ public class SwipeDialogFragment extends SwipeDismissDialogFragment{
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        setScrollableView(lv);
+    }
 }

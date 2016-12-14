@@ -7,6 +7,8 @@ import android.view.Window;
 
 import com.randomapps.dragfragmentdemo.SwipeDialogFragment;
 
+import java.util.ArrayList;
+
 /**
  * Created by yrazlik on 25/11/16.
  */
@@ -19,11 +21,18 @@ public class SwipeDismissDialogFragment extends DialogFragment{
     private SwipeDismissTouchListener mListener = null;
     private SwipeableFrameLayout swipeableLayout;
 
+
     /**
      * Set whether dialog can be swiped away.
      */
     public void setSwipeable(boolean swipeable) {
         mSwipeable = swipeable;
+    }
+
+    public void setScrollableView(View v) {
+        if(swipeableLayout != null) {
+            swipeableLayout.setScrollableView(v);
+        }
     }
 
     /**
