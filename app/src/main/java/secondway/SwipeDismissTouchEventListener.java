@@ -59,17 +59,16 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
                 mDownY = motionEvent.getRawY();
                 initialYPos = motionEvent.getRawY();
                 if (mCallbacks.canDismiss(mToken)) {
-                    mVelocityTracker = VelocityTracker.obtain();
-                    mVelocityTracker.addMovement(motionEvent);
+                    onVelocityTrackerActionDown(motionEvent);
                 }
                 return false;
             }
 
             case MotionEvent.ACTION_UP: {
                 initialYPos = 0;
-                if (mVelocityTracker == null) {
+            /*    if (mVelocityTracker == null) {
                     break;
-                }
+                }*/
 
                 boolean dismiss = (mView.getY() >= mView.getHeight() / 5) ? true : false;
                 if (dismiss) {
@@ -92,8 +91,7 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
                             .setDuration(mAnimationTime)
                             .setListener(null);
                 }
-                mVelocityTracker.recycle();
-                mVelocityTracker = null;
+               onvelocityTrackerRecycle();
                 mTranslationX = 0;
                 mDownY = 0;
                 break;
@@ -101,9 +99,9 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
 
             case MotionEvent.ACTION_CANCEL: {
                 initialYPos = 0;
-                if (mVelocityTracker == null) {
+             /*   if (mVelocityTracker == null) {
                     break;
-                }
+                }*/
 
                 mView.animate()
                         .translationX(0)
@@ -111,8 +109,7 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
                         .alpha(1)
                         .setDuration(mAnimationTime)
                         .setListener(null);
-                mVelocityTracker.recycle();
-                mVelocityTracker = null;
+                onvelocityTrackerRecycle();
                 mTranslationX = 0;
                 mDownY = 0;
                 break;
@@ -164,5 +161,21 @@ public class SwipeDismissTouchEventListener implements View.OnTouchListener{
         });
 
         animator.start();
+    }
+
+    public void onVelocityTrackerActionDown(MotionEvent motionEvent) {
+        mVelocityTracker = VelocityTracker.obtain();
+        mVelocityTracker.addMovement(motionEvent);
+    }
+
+    public void onvelocityTrackerRecycle() {
+        if(mVelocityTracker != null) {
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+        }
+    }
+
+    public void setmVelocityTracker(VelocityTracker mVelocityTracker) {
+        this.mVelocityTracker = mVelocityTracker;
     }
 }

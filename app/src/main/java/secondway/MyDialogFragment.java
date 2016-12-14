@@ -75,6 +75,7 @@ public class MyDialogFragment extends DialogFragment{
 
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN: {
+                        swipeDismissTouchEventListener.onVelocityTrackerActionDown(motionEvent);
                         y1 = motionEvent.getY();
                         break;
                     }
@@ -102,6 +103,12 @@ public class MyDialogFragment extends DialogFragment{
                         }
                         break;
                     }
+                    case MotionEvent.ACTION_UP:
+                        swipeDismissTouchEventListener.onTouch(getDialog().getWindow().getDecorView(), motionEvent);
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        swipeDismissTouchEventListener.onTouch(getDialog().getWindow().getDecorView(), motionEvent);
+                        break;
                 }
 
                 if((lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0) && direction.equalsIgnoreCase("down")) {
