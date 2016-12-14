@@ -13,6 +13,7 @@ import customview.SwipeDismissTouchListener;
 public class SwipeableFrameLayout extends FrameLayout {
 
     private SwipeDismissTouchListener mTouchListener;
+    private boolean swipeDismissEnabled = false;
 
     public SwipeableFrameLayout(Context context) {
         super(context);
@@ -24,12 +25,20 @@ public class SwipeableFrameLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (mTouchListener != null) {
+        if(swipeDismissEnabled) {
+            return true;
+        }
+        return false;
+        /*if (mTouchListener != null) {
             if (mTouchListener.onTouch(this, ev)) {
                 return true;
             }
         }
-        return super.onInterceptTouchEvent(ev);
+        return super.onInterceptTouchEvent(ev);*/
+    }
+
+    public void enableSwipeDismissBehavior(boolean enabled) {
+        swipeDismissEnabled = enabled;
     }
 
 }

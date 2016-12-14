@@ -63,6 +63,22 @@ public class SwipeDialogFragment extends SwipeDismissDialogFragment{
 
         setDialogPreferences(d, R.style.dialogAnimation);
 
+        lv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        if(lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0) {
+                            enableSwipeDismissBehavior(true);
+                        } else {
+                            enableSwipeDismissBehavior(false);
+                        }
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+        });
 
         return d;
 

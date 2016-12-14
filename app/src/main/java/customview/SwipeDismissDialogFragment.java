@@ -17,6 +17,7 @@ public class SwipeDismissDialogFragment extends DialogFragment{
     private boolean mTiltEnabled = true;
     private boolean mSwipeLayoutGenerated = false;
     private SwipeDismissTouchListener mListener = null;
+    private SwipeableFrameLayout swipeableLayout;
 
     /**
      * Set whether dialog can be swiped away.
@@ -67,9 +68,9 @@ public class SwipeDismissDialogFragment extends DialogFragment{
             View content = decorView.getChildAt(0);
             decorView.removeView(content);
 
-            SwipeableFrameLayout layout = new SwipeableFrameLayout(getActivity());
-            layout.addView(content);
-            decorView.addView(layout);
+            swipeableLayout = new SwipeableFrameLayout(getActivity());
+            swipeableLayout.addView(content);
+            decorView.addView(swipeableLayout);
 
             mListener = new SwipeDismissTouchListener(decorView, "layout", new SwipeDismissTouchListener.DismissCallbacks() {
                 @Override
@@ -85,10 +86,14 @@ public class SwipeDismissDialogFragment extends DialogFragment{
                 }
             });
             mListener.setTiltEnabled(mTiltEnabled);
-            layout.setSwipeDismissTouchListener(mListener);
-            layout.setOnTouchListener(mListener);
-            layout.setClickable(true);
+            swipeableLayout.setSwipeDismissTouchListener(mListener);
+            swipeableLayout.setOnTouchListener(mListener);
+            swipeableLayout.setClickable(true);
             mSwipeLayoutGenerated = true;
         }
+    }
+
+    public void enableSwipeDismissBehavior(boolean enabled) {
+        swipeableLayout.enableSwipeDismissBehavior(enabled);
     }
 }
