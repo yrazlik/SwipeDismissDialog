@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import secondway.MyDialogFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -16,7 +18,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 BottomDialogFragment bdf = new BottomDialogFragment();
                 SwipeDialogFragment sdf = new SwipeDialogFragment();
-                getSupportFragmentManager().beginTransaction().add(sdf, "").commit();
+                MyDialogFragment mdf = new MyDialogFragment();
+                getSupportFragmentManager().beginTransaction().add(mdf, "").commit();
             }
         });
     }

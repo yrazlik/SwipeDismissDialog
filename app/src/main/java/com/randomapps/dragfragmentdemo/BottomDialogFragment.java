@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * Created by yrazlik on 24/11/16.
  */
 
-public class BottomDialogFragment extends DialogFragment{
+public class BottomDialogFragment extends android.support.v4.app.DialogFragment{
 
     float initialXPos;
     float initialYPos;

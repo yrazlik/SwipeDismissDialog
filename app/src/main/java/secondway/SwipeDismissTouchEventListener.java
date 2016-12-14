@@ -1,4 +1,5 @@
-package customview;
+package secondway;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -8,29 +9,24 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
-public class SwipeDismissTouchListener implements View.OnTouchListener {
-    // Cached ViewConfiguration and system-wide constant values
-    private int mSlop;
-    private int mMinFlingVelocity;
-    private int mMaxFlingVelocity;
+import customview.SwipeDismissTouchListener;
+
+/**
+ * Created by yrazlik on 14/12/16.
+ */
+
+public class SwipeDismissTouchEventListener implements View.OnTouchListener{
+
     private long mAnimationTime;
 
-    // Fixed properties
     private View mView;
     private DismissCallbacks mCallbacks;
     private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
 
-    // Transient properties
-    private float mDownX;
     private float mDownY;
-    private boolean mSwiping;
-    private int mSwipingSlop;
     private Object mToken;
     private VelocityTracker mVelocityTracker;
     private float mTranslationX;
-
-
-    private boolean mTiltEnabled = true;
 
     public interface DismissCallbacks {
 
@@ -39,11 +35,8 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
         void onDismiss(View view, boolean toRight, Object token);
     }
 
-    public SwipeDismissTouchListener(View view, Object token, DismissCallbacks callbacks) {
+    public SwipeDismissTouchEventListener(View view, Object token, DismissCallbacks callbacks) {
         ViewConfiguration vc = ViewConfiguration.get(view.getContext());
-        mSlop = vc.getScaledTouchSlop();
-        mMinFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16;
-        mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
         mAnimationTime = view.getContext().getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
         mView = view;
@@ -51,13 +44,9 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
         mCallbacks = callbacks;
     }
 
-    public void setTiltEnabled(boolean tiltEnabled) {
-        mTiltEnabled = tiltEnabled;
-    }
-
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        // offset because the view is translated during swipe
+
         motionEvent.offsetLocation(mTranslationX, 0);
 
         if (mViewWidth < 2) {
@@ -66,8 +55,6 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
 
         switch (motionEvent.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
-                // TODO: ensure this is a finger, and set a flag
-                mDownX = motionEvent.getRawX();
                 mDownY = motionEvent.getRawY();
                 if (mCallbacks.canDismiss(mToken)) {
                     mVelocityTracker = VelocityTracker.obtain();
@@ -105,9 +92,7 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
                 mTranslationX = 0;
-                mDownX = 0;
                 mDownY = 0;
-                mSwiping = false;
                 break;
             }
 
@@ -125,9 +110,7 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
                 mTranslationX = 0;
-                mDownX = 0;
                 mDownY = 0;
-                mSwiping = false;
                 break;
             }
 
@@ -139,7 +122,7 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
                 mVelocityTracker.addMovement(motionEvent);
 
                 float deltaY = motionEvent.getRawY() - mDownY;
-                mView.setTranslationY(deltaY - mSwipingSlop);
+                mView.setTranslationY(deltaY);
                 break;
             }
         }
@@ -147,9 +130,6 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
     }
 
     private void performDismiss(final boolean toRight) {
-        // Animate the dismissed view to zero-height and then fire the dismiss callback.
-        // This triggers layout on each animation frame; in the future we may want to do something
-        // smarter and more performant.
 
         final ViewGroup.LayoutParams lp = mView.getLayoutParams();
         final int originalHeight = mView.getHeight();
