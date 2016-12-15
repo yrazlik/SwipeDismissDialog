@@ -69,6 +69,7 @@ public class SwipeableFrameLayout extends FrameLayout {
         private DIRECTION direction;
         private float prevY, currentY;
         private boolean mDragEventStarted = false;
+        private boolean resetDragEvent = false;
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -79,13 +80,13 @@ public class SwipeableFrameLayout extends FrameLayout {
                     Log.d("TOUCH_EVENT", "");
                     break;
                 case MotionEvent.ACTION_UP:
-                    mDragEventStarted = false;
+                    resetDragEvent = true;
                     prevY = 0;
                     currentY = 0;
                     Log.d("TOUCH_EVENT", "");
                     break;
                 case MotionEvent.ACTION_CANCEL:
-                    mDragEventStarted = false;
+                    resetDragEvent = true;
                     prevY = 0;
                     currentY = 0;
                     Log.d("TOUCH_EVENT", "");
@@ -108,6 +109,11 @@ public class SwipeableFrameLayout extends FrameLayout {
                     mDragEventStarted = true;
                     mTouchListener.onTouchEvent(SwipeableFrameLayout.this, motionEvent, true);
                 }
+            }
+
+            if(resetDragEvent) {
+                resetDragEvent = false;
+                mDragEventStarted = false;
             }
 
             return false;
