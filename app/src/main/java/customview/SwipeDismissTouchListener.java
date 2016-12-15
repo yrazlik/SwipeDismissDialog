@@ -9,6 +9,9 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
 public class SwipeDismissTouchListener implements View.OnTouchListener {
+
+    boolean isChildViewScrolling;
+
     // Cached ViewConfiguration and system-wide constant values
     private int mSlop;
     private int mMinFlingVelocity;
@@ -184,5 +187,10 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
         });
 
         animator.start();
+    }
+
+    public void onTouchEvent(View view, MotionEvent motionEvent, boolean isChildViewScrolling) {
+        this.isChildViewScrolling = isChildViewScrolling;
+        onTouch(view, motionEvent);
     }
 }
