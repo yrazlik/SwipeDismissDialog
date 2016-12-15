@@ -68,6 +68,7 @@ public class SwipeableFrameLayout extends FrameLayout {
 
         private DIRECTION direction;
         private float prevY, currentY;
+        private boolean mDragEventStarted = false;
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -78,11 +79,13 @@ public class SwipeableFrameLayout extends FrameLayout {
                     Log.d("TOUCH_EVENT", "");
                     break;
                 case MotionEvent.ACTION_UP:
+                    mDragEventStarted = false;
                     prevY = 0;
                     currentY = 0;
                     Log.d("TOUCH_EVENT", "");
                     break;
                 case MotionEvent.ACTION_CANCEL:
+                    mDragEventStarted = false;
                     prevY = 0;
                     currentY = 0;
                     Log.d("TOUCH_EVENT", "");
@@ -101,7 +104,8 @@ public class SwipeableFrameLayout extends FrameLayout {
 
             if(view instanceof ListView) {
                 ListView lv = (ListView) view;
-                if((lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0) && direction == DIRECTION.DOWN) {
+                if(((lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0) && direction == DIRECTION.DOWN) || mDragEventStarted) {
+                    mDragEventStarted = true;
                     mTouchListener.onTouchEvent(SwipeableFrameLayout.this, motionEvent, true);
                 }
             }
