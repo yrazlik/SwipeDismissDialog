@@ -37,8 +37,9 @@ public class SwipeableFrameLayout extends FrameLayout {
             return true;
         } else if(scrollableView instanceof ListView) {
             ListView lv = (ListView) scrollableView;
-            lv.getChildAt(0); //TODO: güzeeeel devam et. lv.getChildAt(0).getTop() == 0 mı diye falan bak!!
-
+            if((lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0)) {
+                return true;
+            }
         }
         return false;
       /*  if(swipeDismissEnabled) {
