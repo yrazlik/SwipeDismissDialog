@@ -10,12 +10,6 @@ import android.view.ViewGroup;
 
 public class SwipeDismissTouchListener implements View.OnTouchListener {
 
-    boolean isChildViewScrolling;
-
-    // Cached ViewConfiguration and system-wide constant values
-    private int mSlop;
-    private int mMinFlingVelocity;
-    private int mMaxFlingVelocity;
     private long mAnimationTime;
     private float initialYPos;
 
@@ -25,10 +19,7 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
     private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
 
     // Transient properties
-    private float mDownX;
     private float mDownY;
-    private boolean mSwiping;
-    private int mSwipingSlop;
     private Object mToken;
     private VelocityTracker mVelocityTracker;
     private float mTranslationX;
@@ -45,9 +36,6 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
 
     public SwipeDismissTouchListener(View view, Object token, DismissCallbacks callbacks) {
         ViewConfiguration vc = ViewConfiguration.get(view.getContext());
-        mSlop = vc.getScaledTouchSlop();
-        mMinFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16;
-        mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
         mAnimationTime = view.getContext().getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
         mView = view;
@@ -72,7 +60,6 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN: {
                 // TODO: ensure this is a finger, and set a flag
                 initialYPos = motionEvent.getRawY();
-                mDownX = motionEvent.getRawX();
                 mDownY = motionEvent.getRawY();
                 if (mCallbacks.canDismiss(mToken)) {
                     mVelocityTracker = VelocityTracker.obtain();
@@ -111,9 +98,7 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
                 mTranslationX = 0;
-                mDownX = 0;
                 mDownY = 0;
-                mSwiping = false;
                 break;
             }
 
@@ -132,9 +117,7 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
                 mTranslationX = 0;
-                mDownX = 0;
                 mDownY = 0;
-                mSwiping = false;
                 break;
             }
 
@@ -187,10 +170,5 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
         });
 
         animator.start();
-    }
-
-    public void onTouchEvent(View view, MotionEvent motionEvent, boolean isChildViewScrolling) {
-        this.isChildViewScrolling = isChildViewScrolling;
-        onTouch(view, motionEvent);
     }
 }

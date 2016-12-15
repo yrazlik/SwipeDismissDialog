@@ -107,7 +107,7 @@ public class SwipeableFrameLayout extends FrameLayout {
                 ListView lv = (ListView) view;
                 if(((lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0) && direction == DIRECTION.DOWN) || mDragEventStarted) {
                     mDragEventStarted = true;
-                    mTouchListener.onTouchEvent(SwipeableFrameLayout.this, motionEvent, true);
+                    mTouchListener.onTouch(SwipeableFrameLayout.this, motionEvent);
                 }
             }
 
