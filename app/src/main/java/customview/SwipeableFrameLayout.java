@@ -66,7 +66,7 @@ public class SwipeableFrameLayout extends FrameLayout {
 
     private OnTouchListener childScrollableViewTouchListener = new OnTouchListener() {
 
-        private DIRECTION direction;
+        private DIRECTION direction = DIRECTION.DOWN;
         private float prevY, currentY;
         private boolean mDragEventStarted = false;
         private boolean resetDragEvent = false;
