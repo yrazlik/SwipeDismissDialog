@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
@@ -106,6 +107,12 @@ public class SwipeableFrameLayout extends FrameLayout {
             if(view instanceof ListView) {
                 ListView lv = (ListView) view;
                 if(((lv.getChildCount() == 0 || lv.getChildAt(0).getTop() == 0) && direction == DIRECTION.DOWN) || mDragEventStarted) {
+                    mDragEventStarted = true;
+                    mTouchListener.onTouch(SwipeableFrameLayout.this, motionEvent);
+                }
+            } else if(view instanceof ScrollView) {
+                ScrollView sv = (ScrollView) view;
+                if((sv.getScrollY() == 0 && direction == DIRECTION.DOWN) || mDragEventStarted) {
                     mDragEventStarted = true;
                     mTouchListener.onTouch(SwipeableFrameLayout.this, motionEvent);
                 }
